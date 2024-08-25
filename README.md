@@ -8,7 +8,6 @@ A High-level language for [matt's redstone computer](https://github.com/mattbatw
 - If statements
 - Scopes
 ## WIP Features
-- Port mappings interactions
 - While loops
 - Else statements
 ## Known issues
