@@ -59,3 +59,41 @@ main {
 	increment b;
 }
 ```
+Fill screen
+```
+x; y;
+
+x_loop {
+	increment x;
+	cmpexpr x < 32;
+	if;
+		port pixel_x x;
+		port pixel_y y;
+
+		port draw_pixel;
+
+		port buffer_screen;
+
+		x_loop();
+	endif;
+}
+
+loop {
+	x = 255;
+	increment y;
+	cmpexpr y < 32;
+	if;
+		x_loop();
+		loop();
+	endif;
+}
+
+main {
+	port clear_screen_buffer;
+
+	decrement x;
+	decrement y;
+
+	loop();
+}
+```
