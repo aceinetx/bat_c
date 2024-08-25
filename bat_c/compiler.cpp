@@ -19,6 +19,7 @@ std::string compile(tokenarray_t tokens, std::string& assembly) {
 	std::string expression_variable = "";
 	tokenarray_t compare_expression;
 	std::stack<std::string> if_stack;
+	tokenarray_t port_args;
 
 	TokenType last_cmpexpr_operator = IDENTIFIER;
 
@@ -48,6 +49,9 @@ std::string compile(tokenarray_t tokens, std::string& assembly) {
 				}
 				else if (token.type == COMPARE_EXPR) {
 					current_working_instruction = WI_COMPARE_EXPR;
+				}
+				else if (token.type == PORT) {
+					current_working_instruction = WI_PORT;
 				}
 				else if (token.type == IF) {
 					std::string label = ".if_" + std::to_string(i);
@@ -257,6 +261,52 @@ std::string compile(tokenarray_t tokens, std::string& assembly) {
 				last_cmpexpr_operator = op.type;
 
 				compare_expression.clear();
+			}
+		}
+		else if (current_working_instruction == WI_PORT) {
+			if (token.type == ENDL) {
+				if (port_args.empty()) {
+					throw_error("not enough port args", token);
+				}
+				Token& port = port_args.at(0);
+				if (port.type != IDENTIFIER) {
+					throw_error("token type isn't identifier in port", token);
+				}
+
+				if (port_args.size() == 1) {
+					assembly.append(std::format("ldi r5 {}\n", port.value));
+					assembly.append("str r5 r0\n");
+				}
+				else if (port_args.size() == 2) {
+					if (strcmp(port.value, "write_char") == 0) {
+						assembly.append(std::format("ldi r5 {}\n", port.value));
+						assembly.append(std::format("ldi r6 \"{}\"\n", port_args.at(1).value));
+						assembly.append("str r5 r6\n");
+					}
+					else if (strcmp(port.value, "pixel_x") == 0 || strcmp(port.value, "pixel_y") == 0) {
+						assembly.append(std::format("ldi r5 {}\n", port.value));
+
+						Token& arg = port_args.at(1);
+						if (arg.type == NUMBER) {
+							assembly.append(std::format("ldi r6 {}\n", arg.value_long));
+						}
+						else if (arg.type == IDENTIFIER) {
+							assembly.append("ldi r4 " + std::to_string(VarMapGet(arg.value, current_function)) + "\n");
+							assembly.append("lod r4 r6 r0\n");
+						}
+						else {
+							throw_error("invalid port argument", token);
+						}
+
+						assembly.append("str r5 r6\n");
+					}
+				}
+
+				port_args.clear();
+				current_working_instruction = WI_NOTHING;
+			}
+			else {
+				port_args.push_back(token);
 			}
 		}
 	}

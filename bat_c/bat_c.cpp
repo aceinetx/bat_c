@@ -62,6 +62,8 @@ int main(int argc, char** argv)
 				if (token.type == IF) x = "if";
 				if (token.type == ENDIF) x = "endif";
 				if (token.type == NOTEQUALTO) x = "!=";
+				if (token.type == REF) x = "ref";
+				if (token.type == PORT) x = "port";
 				cout << x << " ";
 			}
 			cout << "\n";

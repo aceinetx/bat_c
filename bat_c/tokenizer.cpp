@@ -34,8 +34,8 @@ void append_current_identifier(tokenarray_t& token_arr, std::string& current_ide
 	else if (current_identifier == "return") {
 		token_arr.push_back(Token(TokenType::RETURN));
 	}
-	else if (current_identifier == "int") {
-		token_arr.push_back(Token(TokenType::INTERRUPT));
+	else if (current_identifier == "port") {
+		token_arr.push_back(Token(TokenType::PORT));
 	}
 	else if (current_identifier == "increment") {
 		token_arr.push_back(Token(TokenType::INCREMENT));
@@ -75,6 +75,7 @@ tokenarray_t Tokenize(std::string code) {
 	char prev_contains_id = 0;
 
 	int line=1;
+	bool in_string = false;
 
 	for (int i = 0; i < code.size(); i++) {
 		char c = code.at(i);
