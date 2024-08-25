@@ -11,9 +11,10 @@ A High-level language for [matt's redstone computer](https://github.com/mattbatw
 - Port mappings interactions
 - While loops
 - Else statements
-## Known bugs
+## Known issues
 - You can call functions like this: ```func(``` and not like this: ```func();```
 - If you try to compile this under a linux machine, when ran you'll get segmentation fault (but I think you can run it under wine)
+- Expressions can only be 3-4 operators long (i'm lazy to implement more)
 ## Example programs
 Math operations (Division is not currently supported)
 ```
