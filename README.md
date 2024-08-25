@@ -12,3 +12,4 @@ A High-level language for [matt's redstone computer](https://github.com/mattbatw
 - Else statements
 ## Known bugs
 - You can call functions like this: ```func(``` and not like this: ```func();```
+- If you try to compile this under a linux machine, when ran you'll get segmentation fault
