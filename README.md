@@ -48,3 +48,14 @@ main {
   endif;
 }
 ```
+References
+references are basically variables with the same variable mapping
+```
+a; b;
+
+main {
+	b = ref a;
+	increment a;
+	increment b;
+}
+```
