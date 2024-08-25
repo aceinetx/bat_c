@@ -48,7 +48,7 @@ main {
   endif;
 }
 ```
-References
+References<br>
 references are basically variables with the same variable mapping
 ```
 a; b;
