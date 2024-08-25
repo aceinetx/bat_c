@@ -6,6 +6,7 @@ A High-level language for [matt's redstone computer](https://github.com/mattbatw
 - Functions
 - Compare expressions
 - If statements
+- Scopes
 ## WIP Features
 - Port mappings interactions
 - While loops
@@ -13,3 +14,36 @@ A High-level language for [matt's redstone computer](https://github.com/mattbatw
 ## Known bugs
 - You can call functions like this: ```func(``` and not like this: ```func();```
 - If you try to compile this under a linux machine, when ran you'll get segmentation fault
+## Example programs
+Math operations (Division is not currently supported)
+```
+main {
+  x; y;
+
+  x = 20;
+  y = 5 * x;
+}
+```
+While loop
+```
+x;
+loop {
+  increment x;
+  loop();
+}
+main {
+  loop();
+}
+```
+If statements
+```
+main {
+  x;
+  increment x;
+
+  cmpexpr x == 1;
+  if;
+    x = 69;
+  endif;
+}
+```
