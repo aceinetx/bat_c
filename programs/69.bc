@@ -1,0 +1,10 @@
+counter;
+
+main {
+    increment counter;
+
+    cmpexpr counter < 69;
+    if;
+        main();
+    endif;
+}
