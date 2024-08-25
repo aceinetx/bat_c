@@ -9,6 +9,7 @@ struct VarMapEntry {
 };
 
 extern std::vector<VarMapEntry> var_map;
+extern int references_count;
 
 void VarMapAdd(std::string name, std::string scope);
 

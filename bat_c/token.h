@@ -31,7 +31,8 @@ enum TokenType {
 	EQUALTO,
 	NOTEQUALTO,
 	LESSEQUAL,
-	GREATEREQUAL
+	GREATEREQUAL,
+	REF
 };
 
 class Token {

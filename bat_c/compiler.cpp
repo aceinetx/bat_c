@@ -83,6 +83,8 @@ std::string compile(tokenarray_t tokens, std::string& assembly) {
 					in_expression = false;
 					Token& left_part = expression.at(0);
 
+					bool save_expr_result = true;
+
 					if (expression.size() == 1) {
 						if (left_part.type == IDENTIFIER) {
 							assembly.append("ldi r4 " + std::to_string(VarMapGet(left_part.value, current_function)) + "\n");
@@ -91,6 +93,10 @@ std::string compile(tokenarray_t tokens, std::string& assembly) {
 						else if (left_part.type == NUMBER) {
 							assembly.append("ldi r13 " + std::to_string(left_part.value_long) + "\n");
 						}
+					}
+					else if (expression.size() == 2) {
+						save_expr_result = false;
+						var_map.at(VarMapGet(expression_variable, current_function)).offset = VarMapGet(expression.at(1).value, current_function);
 					}
 					else {
 
@@ -131,8 +137,10 @@ std::string compile(tokenarray_t tokens, std::string& assembly) {
 							throw_error("Invalid operator", token);
 						}
 					}
-					assembly.append("ldi r4 " + std::to_string(VarMapGet(expression_variable, current_function)) + "\n");
-					assembly.append("str r4 r13 r0\n");
+					if (save_expr_result) {
+						assembly.append("ldi r4 " + std::to_string(VarMapGet(expression_variable, current_function)) + "\n");
+						assembly.append("str r4 r13 r0\n");
+					}
 					expression.clear();
 				}
 				else {

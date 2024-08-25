@@ -52,6 +52,9 @@ void append_current_identifier(tokenarray_t& token_arr, std::string& current_ide
 	else if (current_identifier == "cmpexpr") {
 		token_arr.push_back(Token(TokenType::COMPARE_EXPR));
 	}
+	else if (current_identifier == "ref") {
+		token_arr.push_back(Token(TokenType::REF));
+	}
 	else {
 		size_t len = current_identifier.length();
 		char* c_ident = new char[len+1];
