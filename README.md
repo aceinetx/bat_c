@@ -96,3 +96,11 @@ main {
 	loop();
 }
 ```
+Inline assembly
+```
+main {
+	asm
+ldi r5 42
+ldi r6 69;
+}
+```
