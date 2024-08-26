@@ -32,7 +32,8 @@ enum TokenType {
 	NOTEQUALTO,
 	LESSEQUAL,
 	GREATEREQUAL,
-	REF
+	REF,
+	ASM,
 };
 
 class Token {

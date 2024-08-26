@@ -53,6 +53,9 @@ std::string compile(tokenarray_t tokens, std::string& assembly) {
 				else if (token.type == PORT) {
 					current_working_instruction = WI_PORT;
 				}
+				else if (token.type == ASM) {
+					assembly.append(std::string(token.value) + "\n");
+				}
 				else if (token.type == IF) {
 					std::string label = ".if_" + std::to_string(i);
 					if_stack.push(label);

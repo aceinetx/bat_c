@@ -26,6 +26,9 @@ bool contains(T *arr, T val) {
 	return result;
 };
 
+bool inline_assembly = false;
+int inline_asm_len = 0;
+
 void append_current_identifier(tokenarray_t& token_arr, std::string& current_identifier) {
 
 	if (current_identifier == "def") {
@@ -55,6 +58,12 @@ void append_current_identifier(tokenarray_t& token_arr, std::string& current_ide
 	else if (current_identifier == "ref") {
 		token_arr.push_back(Token(TokenType::REF));
 	}
+	else if (current_identifier == "asm") {
+		token_arr.push_back(Token(TokenType::ASM));
+		token_arr.back().need_to_free = true;
+		inline_assembly = true;
+		inline_asm_len = 0;
+	}
 	else {
 		size_t len = current_identifier.length();
 		char* c_ident = new char[len+1];
@@ -70,6 +79,7 @@ tokenarray_t Tokenize(std::string code) {
 	tokenarray_t result;
 
 	std::string current_identifier = "";
+	std::string inline_asm = "";
 	register_t current_number = 0;
 
 	char prev_contains_id = 0;
@@ -79,6 +89,31 @@ tokenarray_t Tokenize(std::string code) {
 
 	for (int i = 0; i < code.size(); i++) {
 		char c = code.at(i);
+		if (inline_assembly) {
+			if (c == ';') inline_assembly = false;
+			else {
+				if (!result.empty()) {
+					if (result.back().type == ASM) {
+						if (inline_asm_len == 0) {
+							inline_asm_len = 2;
+							result.back().value = new char[inline_asm_len];
+							result.back().value[1] = '\0';
+							result.back().value[0] = c;
+						}
+						else {
+							inline_asm_len++;
+							char* new_value = new char[inline_asm_len];
+							memcpy(new_value, result.back().value, inline_asm_len - 1);
+							new_value[inline_asm_len - 2] = c;
+							new_value[inline_asm_len - 1] = '\0';
+							delete result.back().value;
+							result.back().value = new_value;
+						}
+					}
+				}
+			}
+			continue;
+		}
 		char contains_id = 0;
 		if (contains<char>((char*)IDENTIFIER_CHARS, c)) contains_id = 1;
 		if (contains<char>((char*)NUMBER_CHARS, c)) contains_id = 2;
@@ -117,6 +152,10 @@ tokenarray_t Tokenize(std::string code) {
 		else if (c == '-') result.push_back(Token(TokenType::MINUS));
 		else if (c == '*') result.push_back(Token(TokenType::MUL));
 		else if (c == '/') result.push_back(Token(TokenType::DIV));
+
+		if (prev_contains_id == 2 && contains_id == 5) {
+			contains_id = 0;
+		}
 
 
 		switch (contains_id) {

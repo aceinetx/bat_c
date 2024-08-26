@@ -64,6 +64,7 @@ int main(int argc, char** argv)
 				if (token.type == NOTEQUALTO) x = "!=";
 				if (token.type == REF) x = "ref";
 				if (token.type == PORT) x = "port";
+				if (token.type == ASM) x.append(token.value);
 				cout << x << " ";
 			}
 			cout << "\n";

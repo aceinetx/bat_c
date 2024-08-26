@@ -12,5 +12,6 @@ extern std::vector<VarMapEntry> var_map;
 extern int references_count;
 
 void VarMapAdd(std::string name, std::string scope);
+void VarMapAdd(std::string name, std::string scope, int array_size);
 
 ram_t VarMapGet(std::string name, std::string scope);
