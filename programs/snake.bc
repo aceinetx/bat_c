@@ -1,0 +1,112 @@
+player_x; player_y; controller; last_pressed_key; score; apple_x; apple_y; rand;
+
+gen_rand {
+	asm // rand
+ldi r4 254
+lod r4 r1 r0
+ldi r2 30
+and r1 r2 r13
+ldi r4 7
+str r4 r13 r0;
+}
+
+gen_apple {
+	gen_rand();
+	apple_x = rand;
+	gen_rand();
+	apple_y = rand;
+}
+
+game_loop {
+
+	asm // controller
+ldi r4 255
+lod r4 r13 r0
+ldi r4 2
+str r4 r13 r0;
+
+	port clear_screen_buffer;
+
+asm // draw player;
+	port pixel_x player_x;
+	port pixel_y player_y;
+
+	port draw_pixel;
+
+asm // draw apple;
+	port buffer_screen;
+
+	port pixel_x apple_x;
+	port pixel_y apple_y;
+
+	port draw_pixel;
+
+	port buffer_screen;
+
+	cmpexpr controller != 0;
+	if;
+		last_pressed_key = controller;
+	endif;
+
+	asm // last pressed controller key
+ldi r4 4
+lod r4 r13 r0
+ldi r4 250
+str r4 r13 r0;
+
+	cmpexpr last_pressed_key == 8;
+	if;
+		increment player_y;
+	endif;
+
+	cmpexpr last_pressed_key == 2;
+	if;
+		decrement player_y;
+	endif;
+
+	cmpexpr last_pressed_key == 4;
+	if;
+		increment player_x;
+	endif;
+
+	cmpexpr last_pressed_key == 1;
+	if;
+		decrement player_x;
+	endif;
+
+	cmpexpr player_x == 32;
+	if;
+		player_x = 0;
+	endif;
+
+	cmpexpr player_y == 32;
+	if;
+		player_y = 0;
+	endif;
+
+	cmpexpr player_x == 255;
+	if;
+		player_x = 31;
+	endif;
+
+	cmpexpr player_y == 255;
+	if;
+		player_y = 31;
+	endif;
+
+	cmpexpr player_x == apple_x;
+	if;
+		cmpexpr player_y == apple_y;
+		if;
+			increment score;
+			gen_apple();
+		endif;
+	endif;
+
+	game_loop();
+}
+
+main {
+	gen_apple();
+	game_loop();	
+}
