@@ -10,6 +10,8 @@ A High-level language for [matt's redstone computer](https://github.com/mattbatw
 ## WIP Features
 - While loops
 - Else statements
+## Get started
+Your first option is to download the .exe from latest release and run it (under linux use wine), second option is to use bat c [online](https://aceinetserv.000webhostapp.com/batc/)
 ## Known issues
 - You can call functions like this: ```func(``` and not like this: ```func();```
 - If you try to compile this under a linux machine, when ran you'll get segmentation fault (but I think you can run it under wine)
